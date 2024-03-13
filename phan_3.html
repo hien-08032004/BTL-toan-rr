@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tính tổ hợp</title>
+</head>
+<body>
+    <h1>Liệt kê tất cả các cách sắp xếp 5 quyển sách trên một kệ</h1>
+    <button onclick="listAllArrangements()">Liệt kê</button>
+    <div id="result"></div>
+
+    <script>
+        // Hàm tính giai thừa
+        function factorial(n) {
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // Hàm liệt kê tất cả các cách sắp xếp
+        function listAllArrangements() {
+            // Danh sách các quyển sách
+            let books = ['Sách 1', 'Sách 2'];
+            // Lấy phần tử div có id là "result"
+            let resultDiv = document.getElementById("result");
+            // Xóa kết quả cũ
+            resultDiv.innerHTML = "";
+
+            // Duyệt qua tất cả các cách sắp xếp có thể có
+            for (let i = 0; i < Math.pow(2, 5); i++) {
+                let arrangement = [];
+                for (let j = 0; j < 5; j++) {
+                    // Sử dụng toán tử dịch bit và AND để xác định quyển sách nào được chọn
+                    arrangement.push(books[(i >> j) & 1]);
+                }
+                // Tạo một phần tử p mới và thêm vào div "result"
+                let p = document.createElement("p");
+                p.textContent = "Cách thứ " + (i + 1) + ": " + arrangement.join(", ");
+                resultDiv.appendChild(p);
+            }
+        }
+    </script>
+</body>
+</html>

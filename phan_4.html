@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS cho trang web */
+        body {
+            font-family: Arial, sans-serif; /* Font chữ cho trang web */
+            background-color: #f0f0f0; /* Màu nền của trang web */
+        }
+        #result {
+            margin-top: 20px; /* Khoảng cách từ phần tử trên */
+            font-weight: bold; /* Độ đậm của chữ */
+            color: #333; /* Màu chữ */
+        }
+        button {
+            padding: 10px 20px; /* Đệm bên trong nút */
+            background-color: #007BFF; /* Màu nền của nút */
+            color: white; /* Màu chữ của nút */
+            border: none; /* Không viền */
+            cursor: pointer; /* Con trỏ chuột khi di chuyển lên nút */
+        }
+    </style>
+</head>
+<body>
+    <h1>Cho thuê máy</h1>
+    <form id="form">
+        <label for="numCustomers">Số lượng khách hàng:</label><br>
+        <input type="number" id="numCustomers" name="numCustomers"><br>
+        <div id="customerDates"></div>
+        <button type="button" onclick="addCustomer()">Thêm khách hàng</button><br>
+        <button type="button" onclick="calculate()">Tính toán</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        let customers = [];
+
+        /* Hàm thêm khách hàng và tạo các trường nhập liệu tương ứng */
+        function addCustomer() {
+            let numCustomers = document.getElementById('numCustomers').value;
+            let customerDatesDiv = document.getElementById('customerDates');
+            customerDatesDiv.innerHTML = '';
+            for (let i = 0; i < numCustomers; i++) {
+                customerDatesDiv.innerHTML += `<label for="customer${i}">Khách hàng ${i+1} (nhập các ngày cách nhau bởi dấu phẩy):</label><br><input type="text" id="customer${i}" name="customer${i}"><br>`;
+            }
+        }
+
+        /* Hàm tính toán tổng số ngày lớn nhất mà máy có thể được sử dụng */
+        function calculate() {
+            let numCustomers = document.getElementById('numCustomers').value;
+            for (let i = 0; i < numCustomers; i++) {
+                let dates = document.getElementById(`customer${i}`).value.split(',').map(Number);
+                customers.push({id: i, dates: dates});
+            }
+            customers.sort((a, b) => a.dates.length - b.dates.length);
+            let result = [];
+            for (let customer of customers) {
+                if (!result.some(r => customer.dates.some(d => r.dates.includes(d)))) {
+                    result.push(customer);
+                }
+            }
+            /* Hiển thị kết quả lên trang web */
+            document.getElementById('result').innerText = 'Tổng số ngày lớn nhất mà máy có thể được sử dụng là: ' + result.reduce((acc, curr) => acc + curr.dates.length, 0);
+        }
+    </script>
+</body>
+</html>
